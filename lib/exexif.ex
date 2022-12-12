@@ -209,7 +209,8 @@ defmodule Exexif do
 
   @spec extract_thumbnail(%{exif: t()}) :: %{exif: t()}
   defp extract_thumbnail(result) do
-    exif_keys = Map.keys(result.exif)
+    exif_data = result |> Map.get(:exif, %{})
+    exif_keys = exif_data |> Map.keys()
 
     result =
       if Enum.all?(Thumbnail.fields(), fn e -> Enum.any?(exif_keys, &(&1 == e)) end) do
@@ -227,6 +228,6 @@ defmodule Exexif do
         result
       end
 
-    %{result | exif: Map.drop(result.exif, Thumbnail.fields())}
+    %{result | exif: Map.drop(exif_data, Thumbnail.fields())}
   end
 end
