@@ -209,25 +209,6 @@ defmodule Exexif do
 
   @spec extract_thumbnail(%{exif: t()}) :: %{exif: t()}
   defp extract_thumbnail(result) do
-    exif_data = result |> Map.get(:exif, %{})
-    exif_keys = exif_data |> Map.keys()
-
-    result =
-      if Enum.all?(Thumbnail.fields(), fn e -> Enum.any?(exif_keys, &(&1 == e)) end) do
-        Map.put(
-          result,
-          :thumbnail,
-          struct(
-            Thumbnail,
-            Thumbnail.fields()
-            |> Enum.map(fn e -> {e, result.exif[e]} end)
-            |> Enum.into(%{})
-          )
-        )
-      else
-        result
-      end
-
-    %{result | exif: Map.drop(exif_data, Thumbnail.fields())}
+    result
   end
 end
